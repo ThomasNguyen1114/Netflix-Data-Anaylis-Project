@@ -13,7 +13,7 @@ Netflix is home to thousands of movies from around the globe, but have you ever 
 
 I used the `netflix_titles.csv` dataset available on Kaggle. It contains information about movies and TV shows on Netflix, including title, type, director, country, release year, and maturity rating.
 
-Many rows had multiple countries listed (e.g., "United States, Canada"). To accurately count movie production by country, I split them.
+Many rows had multiple countries listed (e.g., "United States, Canada"). To accurately count title production by country, I split them.
 
 ### 🌍 Which Countries Make the Most Netflix Movies?
 
