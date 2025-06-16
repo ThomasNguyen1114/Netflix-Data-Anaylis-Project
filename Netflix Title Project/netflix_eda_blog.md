@@ -1,26 +1,64 @@
-## 🎬 Netflix Movies Around the World: What the Data Says  
-*By Thomas Nguyen*
+# 🎬 Analyzing Netflix’s Global Content: Which Countries Produce the Most Titles?
 
----
+## ✨ Introduction
 
-### 📊 Introduction
+Netflix is a powerhouse in streaming, boasting thousands of movies and TV shows from around the world. But which countries are producing the most content on Netflix? In this project, I explored Netflix’s global catalog to uncover the top countries contributing titles to the platform.
 
-Netflix is home to thousands of movies from around the globe, but have you ever wondered which countries produce the most content on the platform? In this exploratory data analysis (EDA), I dug into a public dataset of Netflix titles to find out. I cleaned up the data, and visualized an interesting trends by looking at the countries.
+## 🔍 Objective
 
----
+The goal was simple:
+- Clean and preprocess Netflix’s dataset.
+- Analyze the number of titles produced by country.
+- Visualize the top countries by title count.
+- Practice key data analysis and visualization skills using Python.
 
-### 🗓 Loading and Cleaning the Data
+## 🗂 Dataset Overview
 
-I used the `netflix_titles.csv` dataset available on Kaggle. It contains information about movies and TV shows on Netflix, including title, type, director, country, release year, and maturity rating.
+I worked with the publicly available `netflix_titles.csv` dataset, which contains:
+- `title`
+- `country`
+- `director`
+- `cast`
+- `date_added`
+- `duration`
+- `rating`
+- and more...
 
-Many rows had multiple countries listed (e.g., "United States, Canada"). To accurately count title production by country, I split them.
+## 🧹 Step 1: Data Cleaning
 
-### 🌍 Which Countries Make the Most Netflix Movies?
+The dataset had some missing values, especially for `director`, `cast`, `date_added`, `duration`, `country`, and `rating`. I cleaned the data by:
+- Filling missing director and cast values with `'Unknown'`.
+- Dropping entries with missing country or rating fields (essential for analysis).
 
-After cleaning the data, I counted how many times each country appeared:
+```python
+netflixData['director'] = netflixData['director'].fillna('Unknown')
+netflixData['cast'] = netflixData['cast'].fillna('Unknown')
+netflixData = netflixData.dropna(subset=['country', 'rating'])
+```
 
-Then I visualized it using Seaborn:
+## 🔍 Step 2: Handling Multiple Countries
 
+Many titles are co-productions across multiple countries, listed as comma-separated values in the country column. To get accurate counts, I:
+
+Split the country column by commas.
+
+Used the .explode() function to create one row per country per title.
+```
+countryList = netflixData['country'].str.split(', ').explode()
+```
+
+## 📊 Step 3: Analysis & Visualization
+I counted the number of titles per country and identified the Top 10: 
+```
+countryCount = countryList.value_counts().head(10)
+```
+
+Then I plotted a bar chart using Seaborn for a clear visual:
+```
+sns.barplot(x=countryCount.index, y=countryCount.values, palette='viridis')
+```
+
+## 📉 Insights
 #### 🏆 Top 10 Countries:
 
 1. United States   
@@ -34,11 +72,27 @@ Then I visualized it using Seaborn:
 9. Germany 
 10. Mexico
 
-Unsurprisingly, the U.S. leads by a wide margin, but it's interesting to see India and the U.K. following close behind.
+- **The United States leads by a large margin, followed by India, the United Kingdom, and Canada.**
+- **The results reflect both the size of production industries and Netflix’s international licensing deals.**
+- **Co-productions make it important to carefully handle multi-country data.**
 
-### 📁 Tools Used
+## 🧰 Tools Used
+- **Python**
+- **pandas, seaborn, matplotlib**
+- **Visual Studio Code**
 
-- Python 🐍  
-- pandas  
-- seaborn & matplotlib  
-- Jupyter Notebook
+## 📎 How to Run
+1. Download the dataset and script.
+2. Make sure both are in the same folder.
+3. Install dependencies:
+```
+pip install pandas matplotlib seaborn
+```
+4. Run the script:
+```
+python netflixProject.py
+```
+
+## 🎯 Conclusion
+This simple yet insightful analysis highlights the global nature of Netflix’s content library. It also reinforces important data cleaning techniques for messy real-world data — especially handling multi-valued fields.
+
